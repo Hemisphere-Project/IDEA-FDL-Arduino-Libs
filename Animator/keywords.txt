@@ -1,0 +1,26 @@
+#######################################
+# Syntax Coloring Map For ANIMATOR
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+AnimatorClass	KEYWORD1
+Animator 	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setFPS	KEYWORD2
+nextFrame	KEYWORD2
+check	KEYWORD2
+checkStep	KEYWORD2
+linearAnim	KEYWORD2
+strobeAnim	KEYWORD2
+randAnim	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################

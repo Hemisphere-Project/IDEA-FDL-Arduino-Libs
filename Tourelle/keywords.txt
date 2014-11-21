@@ -1,0 +1,44 @@
+#######################################
+# Syntax Coloring Map For TOURELLE
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Tourelle	KEYWORD1
+MiniServo 	KEYWORD1
+MiniLed 	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setLimits 	KEYWORD2
+setAngle 	KEYWORD2
+setAnglePct 	KEYWORD2
+attach 	KEYWORD2
+setLimits 	KEYWORD2
+setIntensity 	KEYWORD2
+setIntensityPct 	KEYWORD2
+rotate 	KEYWORD2
+elevate 	KEYWORD2
+lightup 	KEYWORD2
+animate 	KEYWORD2
+randomize 	KEYWORD2
+strobe 	KEYWORD2
+setState 	KEYWORD2
+setStatePct 	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+ANGLE_MIN	LITERAL1
+ANGLE_MAX	LITERAL1
+FOOT_MIN	LITERAL1
+FOOT_MAX	LITERAL1
+ARM_MIN	LITERAL1
+ARM_MAX	LITERAL1
+LED_MIN	LITERAL1
+LED_MAX	LITERAL1

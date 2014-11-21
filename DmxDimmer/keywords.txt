@@ -1,0 +1,25 @@
+#######################################
+# Syntax Coloring Map For DMXDIMMER
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+DmxDimmer	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+attach	KEYWORD2
+setLimits	KEYWORD2
+setIntensity	KEYWORD2
+setIntensityPct	KEYWORD2
+lightup	KEYWORD2
+randomize	KEYWORD2
+strobe	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
