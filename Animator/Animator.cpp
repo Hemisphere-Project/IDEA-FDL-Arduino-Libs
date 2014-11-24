@@ -3,8 +3,16 @@
 #include <Arduino.h>
 #include "Animator.h"
 
+#if defined(__AVR_ATmega2560__)
+#define RESET_INTERRUPT 2 
+#else
+#define RESET_INTERRUPT 0
+#endif
+
 AnimatorClass::AnimatorClass()
 {
+	endPin = 0;
+	
 	stepCount = 0;
 	activeStep = 0;
 
@@ -23,19 +31,51 @@ void AnimatorClass::setFPS(int n_fps)
 	fps = n_fps;
 }
 
+void AnimatorClass::extSync(int _endPin)
+{
+	endPin = _endPin;
+	pinMode(endPin,OUTPUT);
+	
+	attachInterrupt(RESET_INTERRUPT, reinterpret_cast<void (*)()>(&extRestart), RISING);
+}
+
+void AnimatorClass::extRestart()
+{
+	Animator.restart();
+}
+
+void AnimatorClass::restart()
+{
+	currentFrameGlobal = 1;
+	currentFrameStep = 1;
+}
+
 bool AnimatorClass::nextFrame()
 {
+	//External SYNC => catch the end and wait for interrupt
+	if (endPin > 0 && currentFrameGlobal == totalFrameGlobal)
+	{
+		digitalWrite(endPin,LOW);
+		delay(10);
+		digitalWrite(endPin,HIGH); //alert others that i'm done
+		while(currentFrameGlobal == totalFrameGlobal) delay(1); //go to sleep
+	}
+
+	//STEP progress
 	currentFrameStep++;
-	if (currentFrameStep > totalFrameStep) currentFrameStep = 1;
-    
+	if (currentFrameStep > totalFrameStep) currentFrameStep = 1; //loop into the Step
+	
+	//GLOBAL progress
 	currentFrameGlobal++;
-	if (currentFrameGlobal > totalFrameGlobal) currentFrameGlobal = 1;
+	if (currentFrameGlobal > totalFrameGlobal) restart();
 
-  	int delayTime = lastFrameTime+(1000/fps)-millis();
-  	if (delayTime > 0) delay(delayTime);
-  	lastFrameTime = millis();
+	//FPS Delay
+	int delayTime = lastFrameTime+(1000/fps)-millis();
+	if (delayTime > 0) delay(delayTime);
+	lastFrameTime = millis();
 
-  	stepCount = 0;
+	//Reset Step counter (to track step change on the next run)
+	stepCount = 0;
 }
 
 bool AnimatorClass::check(long startFrame, long stopFrame)

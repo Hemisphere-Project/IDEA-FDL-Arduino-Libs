@@ -13,6 +13,8 @@ class AnimatorClass {
 
 		void setFPS(int n_fps);
 		bool nextFrame();
+		void restart();
+		
 		bool check(long startFrame, long stopFrame);
 		bool checkStep(long startFrame, long stopFrame);
 		
@@ -23,15 +25,19 @@ class AnimatorClass {
 		
 		int randAnim(int min, int max);
 		int randAnim();
+		
+		void extSync(int _endPin);
+		static void extRestart();
 
 
 	private:
+		int endPin;
 		int fps;
 		int stepCount;
 		int activeStep;
-		long currentFrameGlobal;
+		volatile long currentFrameGlobal;
 		long totalFrameGlobal;
-		long currentFrameStep;
+		volatile long currentFrameStep;
 		long totalFrameStep;
 		long lastFrameTime;
 };

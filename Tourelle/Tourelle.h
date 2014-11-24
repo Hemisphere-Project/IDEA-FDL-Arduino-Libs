@@ -19,7 +19,7 @@
 #define ARM_MAX 150
 
 #define LED_MIN 0
-#define LED_MAX 40
+#define LED_MAX 255
 
 
 /*** SERVO ***/
@@ -83,10 +83,12 @@ class Tourelle
 		void setState(int *state);
 		void setStatePct(int *state);
 
-	private:
 		MiniServo Foot;
 		MiniServo Arm;
 		MiniLed Led;
+		
+	private:
+		
 };
 
 #endif
