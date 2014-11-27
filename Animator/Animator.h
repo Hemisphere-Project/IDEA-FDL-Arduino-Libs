@@ -17,6 +17,9 @@ class AnimatorClass {
 		
 		bool check(long startFrame, long stopFrame);
 		bool checkStep(long startFrame, long stopFrame);
+
+		int getFrame();
+		int getFrameStep();
 		
 		int linearAnim(long startFrame, long stopFrame, int startValue, int stopValue);
 
@@ -33,13 +36,11 @@ class AnimatorClass {
 	private:
 		int endPin;
 		int fps;
-		int stepCount;
-		int activeStep;
 		volatile long currentFrameGlobal;
 		long totalFrameGlobal;
-		volatile long currentFrameStep;
-		long totalFrameStep;
 		long lastFrameTime;
+		long offsetFrameStep;
+		long totalFrameStep;
 };
 extern AnimatorClass Animator;
 

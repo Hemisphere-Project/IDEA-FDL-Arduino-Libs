@@ -12,18 +12,26 @@
 AnimatorClass::AnimatorClass()
 {
 	endPin = 0;
-	
-	stepCount = 0;
-	activeStep = 0;
 
 	currentFrameGlobal = 1;
 	totalFrameGlobal = 0;
 	
-	currentFrameStep = 1;
 	totalFrameStep = 0;
+	offsetFrameStep = 1; 
 
 	lastFrameTime = 0;
 	fps = 25;
+}
+
+//absolute frame in the global timeline
+int AnimatorClass::getFrame() {
+	return currentFrameGlobal;
+}
+
+//calculate relative frame in the step specific timeline
+int AnimatorClass::getFrameStep() 
+{
+	return ((getFrame()-offsetFrameStep)%totalFrameStep)+1;
 }
 
 void AnimatorClass::setFPS(int n_fps)
@@ -47,7 +55,6 @@ void AnimatorClass::extRestart()
 void AnimatorClass::restart()
 {
 	currentFrameGlobal = 1;
-	currentFrameStep = 1;
 }
 
 bool AnimatorClass::nextFrame()
@@ -60,10 +67,6 @@ bool AnimatorClass::nextFrame()
 		digitalWrite(endPin,HIGH); //alert others that i'm done
 		while(currentFrameGlobal == totalFrameGlobal) delay(1); //go to sleep
 	}
-
-	//STEP progress
-	currentFrameStep++;
-	if (currentFrameStep > totalFrameStep) currentFrameStep = 1; //loop into the Step
 	
 	//GLOBAL progress
 	currentFrameGlobal++;
@@ -73,42 +76,37 @@ bool AnimatorClass::nextFrame()
 	int delayTime = lastFrameTime+(1000/fps)-millis();
 	if (delayTime > 0) delay(delayTime);
 	lastFrameTime = millis();
-
-	//Reset Step counter (to track step change on the next run)
-	stepCount = 0;
 }
 
 bool AnimatorClass::check(long startFrame, long stopFrame)
 {
 	totalFrameStep = max(totalFrameStep, stopFrame);
-	return (currentFrameStep >= startFrame && currentFrameStep < stopFrame);
+	return (getFrameStep() >= startFrame && getFrameStep() < stopFrame);
 }
 
 bool AnimatorClass::checkStep(long startFrame, long stopFrame)
 {
-	stepCount++;
 	totalFrameGlobal = max(totalFrameGlobal, stopFrame);
 	bool isIn = (currentFrameGlobal >= startFrame && currentFrameGlobal < stopFrame);
 	
-	//change active step
-	if (isIn && activeStep != stepCount)
+	//set reference for the current step
+	if (isIn)
 	{
-		currentFrameStep = 1;
+		offsetFrameStep = startFrame;
 		totalFrameStep = 0;
-		activeStep = stepCount;
-	} 
+	}
 		
 	return isIn;
 }
 
 int AnimatorClass::linearAnim(long startFrame, long stopFrame, int startValue, int stopValue)
 {
-	return startValue + int(1.0 * (stopValue - startValue) * (currentFrameStep - startFrame) / (stopFrame-startFrame));
+	return startValue + int(1.0 * (stopValue - startValue) * (getFrameStep() - startFrame) / (stopFrame-startFrame));
 }
 
 int AnimatorClass::strobeAnim(int frequencyFrame, int min, int max)
 {
-	return (currentFrameStep % frequencyFrame > 0) ? min : max;
+	return (getFrameStep() % frequencyFrame > 0) ? min : max;
 }
 
 int AnimatorClass::strobeAnim(int frequencyFrame)
