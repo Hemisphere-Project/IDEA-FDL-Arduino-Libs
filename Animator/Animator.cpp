@@ -84,7 +84,7 @@ bool AnimatorClass::check(long startFrame, long stopFrame)
 	return (getFrameStep() >= startFrame && getFrameStep() < stopFrame);
 }
 
-bool AnimatorClass::checkStep(long startFrame, long stopFrame)
+bool AnimatorClass::checkStep(long startFrame, long stopFrame, long duration)
 {
 	totalFrameGlobal = max(totalFrameGlobal, stopFrame);
 	bool isIn = (currentFrameGlobal >= startFrame && currentFrameGlobal < stopFrame);
@@ -93,10 +93,15 @@ bool AnimatorClass::checkStep(long startFrame, long stopFrame)
 	if (isIn)
 	{
 		offsetFrameStep = startFrame;
-		totalFrameStep = 0;
+		totalFrameStep = duration;
 	}
 		
 	return isIn;
+}
+
+bool AnimatorClass::checkStep(long startFrame, long stopFrame)
+{
+	checkStep(startFrame,stopFrame,0);
 }
 
 int AnimatorClass::linearAnim(long startFrame, long stopFrame, int startValue, int stopValue)

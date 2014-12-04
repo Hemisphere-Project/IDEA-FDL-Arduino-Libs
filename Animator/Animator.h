@@ -17,6 +17,7 @@ class AnimatorClass {
 		
 		bool check(long startFrame, long stopFrame);
 		bool checkStep(long startFrame, long stopFrame);
+		bool checkStep(long startFrame, long stopFrame, long duration);
 
 		int getFrame();
 		int getFrameStep();
